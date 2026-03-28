@@ -2,11 +2,10 @@ package com.investment.assets.upbit.dto;
 
 import lombok.Data;
 
-@Data
-public class Account {
-    private String currency;
-    private String balance;
-    private String locked;
-    private String avg_buy_price;
-    private boolean avg_buy_price_modified;
-}
+public record Account (
+    String currency,
+    String balance,
+    String locked,
+    String avg_buy_price,
+    boolean avg_buy_price_modified
+){}

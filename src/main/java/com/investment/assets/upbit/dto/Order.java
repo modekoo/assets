@@ -1,9 +1,9 @@
 package com.investment.assets.upbit.dto;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
+//구매 들어갈 때 개선해봅시다.
 @Getter
 @Builder
 public class Order {
@@ -41,6 +41,5 @@ public class Order {
             return this;
         }
     }
-
 }
 

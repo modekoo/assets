@@ -1,33 +1,30 @@
 package com.investment.assets.upbit.dto;
 
-import lombok.Data;
-
-@Data
-public class Ticker {
-    private String market;
-    private String trade_date;
-    private String trade_time;
-    private String trade_date_kst;
-    private String trade_time_kst;
-    private long trade_timestamp;
-    private String opening_price;
-    private String high_price;
-    private String low_price;
-    private String trade_price;
-    private String prev_closing_price;
-    private String change;
-    private long change_price;
-    private double change_rate;
-    private String signed_change_price;
-    private String signed_change_rate;
-    private String trade_volume;
-    private double acc_trade_price;
-    private double acc_trade_price_24h;
-    private double acc_trade_volume;
-    private double acc_trade_volume_24h;
-    private long highest_52_week_price;
-    private String highest_52_week_date;
-    private long lowest_52_week_price;
-    private String lowest_52_week_date;
-    private long timestamp;
-}
+public record Ticker (
+    String market,
+    String trade_date,
+    String trade_time,
+    String trade_date_kst,
+    String trade_time_kst,
+    long trade_timestamp,
+    String opening_price,
+    String high_price,
+    String low_price,
+    String trade_price,
+    String prev_closing_price,
+    String change,
+    long change_price,
+    double change_rate,
+    String signed_change_price,
+    String signed_change_rate,
+    String trade_volume,
+    double acc_trade_price,
+    double acc_trade_price_24h,
+    double acc_trade_volume,
+    double acc_trade_volume_24h,
+    long highest_52_week_price,
+    String highest_52_week_date,
+    long lowest_52_week_price,
+    String lowest_52_week_date,
+    long timestamp
+){}

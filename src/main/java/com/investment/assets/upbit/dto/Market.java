@@ -1,10 +1,7 @@
 package com.investment.assets.upbit.dto;
 
-import lombok.Data;
-
-@Data
-public class Market {
-    private String market;
-    private String korean_name;
-    private String english_name;
-}
+public record Market (
+    String market,
+    String korean_name,
+    String english_name
+){}
