@@ -18,5 +18,8 @@
       "sourceType": "com.investment.assets.config.ConfigBean"
     }
   ],
-  "hints": []
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
 }

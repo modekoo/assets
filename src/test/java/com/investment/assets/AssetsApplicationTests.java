@@ -3,10 +3,10 @@ package com.investment.assets;
 import com.google.gson.Gson;
 import com.google.gson.internal.Primitives;
 import com.google.gson.reflect.TypeToken;
-import com.investment.assets.client.UpbitAuthentication;
+import com.investment.assets.upbit.client.UpbitAuthProvider;
 import com.investment.assets.config.ConfigBean;
-import com.investment.assets.dto.*;
 import com.investment.assets.exception.RestTemplateResponseErrorHandler;
+import com.investment.assets.upbit.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +19,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +35,7 @@ class AssetsApplicationTests {
 	ConfigBean configBean;
 
 	@Autowired
-	UpbitAuthentication upbitAuthentication;
+	UpbitAuthProvider upbitAuthProvider;
 
 //	@Test
 	void contextLoads() {
@@ -51,7 +48,7 @@ class AssetsApplicationTests {
 	void callUpbitAccountInfo() throws Exception {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type" , "application/json; charset=utf-8");
-		httpHeaders.add("Authorization", upbitAuthentication.setAuthentication());
+		httpHeaders.add("Authorization", upbitAuthProvider.setAuthentication());
 
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
@@ -71,7 +68,7 @@ class AssetsApplicationTests {
 	void callUpbitMarketalAll() throws Exception {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add("Content-Type" , "application/json; charset=utf-8");
-		httpHeaders.add("Authorization", upbitAuthentication.setAuthentication());
+		httpHeaders.add("Authorization", upbitAuthProvider.setAuthentication());
 
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
@@ -104,7 +101,7 @@ class AssetsApplicationTests {
 		void callUpbitMarketInfoDOGE() throws Exception {
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add("Content-Type" , "application/json; charset=utf-8");
-			httpHeaders.add("Authorization", upbitAuthentication.setAuthentication(queryStr));
+			httpHeaders.add("Authorization", upbitAuthProvider.setAuthentication(queryStr));
 
 			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
@@ -138,7 +135,7 @@ class AssetsApplicationTests {
 		void callUpbitBuyDOGE() throws Exception {
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add("Content-Type" , "application/json; charset=utf-8");
-			httpHeaders.add("Authorization", upbitAuthentication.setAuthentication(queryStr));
+			httpHeaders.add("Authorization", upbitAuthProvider.setAuthentication(queryStr));
 
 			RestTemplate restTemplate = new RestTemplate();
 			restTemplate.setErrorHandler(new RestTemplateResponseErrorHandler());
