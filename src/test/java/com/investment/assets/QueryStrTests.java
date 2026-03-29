@@ -3,13 +3,14 @@ package com.investment.assets;
 import com.google.gson.Gson;
 import com.google.gson.internal.Primitives;
 import com.google.gson.reflect.TypeToken;
-import com.investment.assets.config.ConfigBean;
+import com.investment.assets.upbit.config.ConfigBean;
 import com.investment.assets.upbit.dto.Order;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @SpringBootTest
+@ActiveProfiles("test")
 class QueryStrTests {
 
 	@Autowired

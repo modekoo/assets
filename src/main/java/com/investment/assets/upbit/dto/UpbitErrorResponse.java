@@ -1,6 +1,6 @@
 package com.investment.assets.upbit.dto;
 
-public record UpBitErrorResponse (
+public record UpbitErrorResponse(
     ErrorDetail error
 ){
     public record ErrorDetail (

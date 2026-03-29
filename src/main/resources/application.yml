@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: assets
+  Kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+logging:
+  level:
+    root: info
+    com.investment.assets: debug
+    org.springframework.web: debug
+    org.springframework.jdbc: debug
+
+upbit:
+  access-key: ${UPBIT_ACCESS_KEY}
+  secret-key: ${UPBIT_SECRET_KEY}
+  proxy-url: http://158.180.83.196

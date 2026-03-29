@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.internal.Primitives;
 import com.google.gson.reflect.TypeToken;
 import com.investment.assets.upbit.client.UpbitAuthProvider;
-import com.investment.assets.config.ConfigBean;
+import com.investment.assets.upbit.config.ConfigBean;
 import com.investment.assets.exception.RestTemplateResponseErrorHandler;
 import com.investment.assets.upbit.dto.*;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @SpringBootTest
+@ActiveProfiles("test")
 class AssetsApplicationTests {
 
 	@Autowired
@@ -109,7 +111,7 @@ class AssetsApplicationTests {
 					.get("http://158.180.83.196/v1/ticker?" + queryStr)
 					.headers(httpHeaders)
 					.build();
-			ResponseEntity<List<Ticker>> result = restTemplate.exchange(requestEntity, new ParameterizedTypeReference<List<Ticker>>() {});
+			ResponseEntity<List<UpbitTickerResponse>> result = restTemplate.exchange(requestEntity, new ParameterizedTypeReference<List<UpbitTickerResponse>>() {});
 			log.debug("status = {}", result.getStatusCode());
 			if(result.getStatusCode().is2xxSuccessful())
 				log.debug("body = {}", result.getBody());
@@ -153,7 +155,7 @@ class AssetsApplicationTests {
 				log.debug("orderResponse = {}", orderResponse);
 			}
 			else{
-				UpBitErrorResponse upBitErrorResponse = parseObj(result.getBody(), UpBitErrorResponse.class);
+				UpbitErrorResponse upBitErrorResponse = parseObj(result.getBody(), UpbitErrorResponse.class);
 				log.debug("upBitErrorResponse = {}", upBitErrorResponse);
 			}
 			Assertions.assertEquals(HttpStatus.CREATED, result.getStatusCode());

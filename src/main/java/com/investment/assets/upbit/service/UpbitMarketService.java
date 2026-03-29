@@ -3,7 +3,10 @@ package com.investment.assets.upbit.service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.investment.assets.upbit.client.UpbitRestClient;
-import com.investment.assets.upbit.dto.Ticker;
+import com.investment.assets.upbit.config.ConfigBean;
+import com.investment.assets.upbit.dto.MarketTickerDocument;
+import com.investment.assets.upbit.dto.UpbitTickerResponse;
+import com.investment.assets.upbit.kafka.producer.MarketTickerProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -17,21 +20,26 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UpbitMarketService {
-    final UpbitRestClient upbitRestClient;
+    private final UpbitRestClient upbitRestClient;
+    private final MarketTickerProducer marketTickerProducer;
+    private final ConfigBean configBean;
 
-    public List<Ticker> getCoinInfo(){
+    public void getTickerInfo(){
         Map<String, Object> queryMap = new HashMap<>();
         queryMap.put("markets", "KRW-DOGE");
-        String queryStr = makeQueryStr(queryMap);
-        return upbitRestClient.get("http://158.180.83.196/v1/ticker?", queryStr
-                , new ParameterizedTypeReference<List<Ticker>>(){});
+        List<UpbitTickerResponse> resultTickerList = upbitRestClient.get(configBean.getProxyUrl(),"/v1/ticker", queryMap
+                , new ParameterizedTypeReference<List<UpbitTickerResponse>>(){});
+
+        if (resultTickerList == null || resultTickerList.isEmpty()) {
+            return;
+            //todo throw new APIException....
+        }
+
+        MarketTickerDocument marketTickerDocument = MarketTickerDocument.from(resultTickerList.getFirst());
+        marketTickerProducer.send(marketTickerDocument);
+
     }
 
     //util, or client
-    private <T> String makeQueryStr(T queryObj){
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, Object>>(){}.getType();
-        Map<String, Object> queryMap = gson.fromJson(gson.toJson(queryObj), type);
-        return queryMap.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).collect(Collectors.joining("&"));
-    }
+
 }
