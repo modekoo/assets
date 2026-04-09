@@ -1,0 +1,19 @@
+services:
+  assets-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: assets-app
+    restart: unless-stopped
+    env_file:
+      - .env    #OCI .env
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: ${TZ:-Asia/Seoul}
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
