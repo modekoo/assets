@@ -3,6 +3,8 @@ package com.investment.assets.upbit.client;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.investment.assets.client.CommonHttpClient;
+import com.investment.assets.exception.ApiException;
+import com.investment.assets.exception.ErrorCode;
 import com.investment.assets.exception.RestTemplateResponseErrorHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +69,9 @@ public class UpbitRestClient implements CommonHttpClient {
         log.debug("status = {}", result.getStatusCode());
         if(result.getStatusCode().is2xxSuccessful())
             log.debug("body = {}", result.getBody());
+        //to-do 200이 아닐시, 처리 추가
+        else
+            throw new ApiException(ErrorCode.INTERNAL_ERROR, result.getBody().toString());
 
         return result.getBody();
     }
