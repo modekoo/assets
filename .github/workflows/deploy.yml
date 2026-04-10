@@ -1,0 +1,57 @@
+name: Deploy to OCI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "${{ secrets.BASTION_SSH_KEY }}" > ~/.ssh/bastion.key
+          echo "${{ secrets.APP_SSH_KEY }}" > ~/.ssh/app.key
+
+          chmod 600 ~/.ssh/bastion.key
+          chmod 600 ~/.ssh/app.key
+
+          cat <<EOF > ~/.ssh/config
+          Host bastion
+            HostName ${{ secrets.BASTION_HOST }}
+            User ${{ secrets.BASTION_USER }}
+            IdentityFile ~/.ssh/bastion.key
+            StrictHostKeyChecking no
+
+          Host app
+            HostName ${{ secrets.APP_HOST }}
+            User ${{ secrets.APP_USER }}
+            IdentityFile ~/.ssh/app.key
+            ProxyJump bastion
+            StrictHostKeyChecking no
+          EOF
+
+      - name: Deploy
+        run: |
+          ssh app << 'EOF'
+            set -e
+
+            cd /home/opc/app/assets
+
+            echo "📦 Fetch latest"
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "🐳 Docker rebuild"
+            docker compose down
+            docker compose up -d --build
+
+            echo "✅ Deploy complete"
+          EOF
